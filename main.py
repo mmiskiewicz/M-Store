@@ -44,5 +44,11 @@ def show_main_page():
     return render_template("index.html", products=products)
 
 
+@app.route('/product/<int:product_id>', methods=["GET", "POST"])
+def view_product(product_id):
+    requested_product = Product.query.get(product_id)
+    return render_template("product.html", product=requested_product)
+
+
 if __name__ == "__main__":
     app.run(debug=True)
