@@ -177,6 +177,15 @@
         </div>
         <!--<div class="row px-xl-5">-->
            <div class="text-center">
+               {% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul style="list-style-type: none; color:#c17a74;" class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
             {{ wtf.quick_form(form, novalidate=True, button_map={"submit": "primary"}) }}
 
         </div>
