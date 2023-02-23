@@ -18,4 +18,5 @@ class RegisterForm(FlaskForm):
     address = StringField("Address", validators=[DataRequired()])
     postal_code = StringField("Postal code", validators=[DataRequired()])
     city = StringField("City", validators=[DataRequired()])
+    country = StringField("Country", validators=[DataRequired()])
     submit = SubmitField("Sign up")
