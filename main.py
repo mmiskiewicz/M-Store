@@ -157,6 +157,11 @@ def register():
     return render_template("register.html", form=form)
 
 
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('show_main_page'))
+
 
 if __name__ == "__main__":
     app.run(debug=True)
