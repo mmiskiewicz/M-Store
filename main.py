@@ -1,7 +1,8 @@
-from flask import Flask, render_template, redirect, url_for, request, flash
+from flask import Flask, render_template, redirect, url_for, request, flash, session
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from flask_ckeditor import CKEditor
+from sqlalchemy import engine
 from sqlalchemy.orm import relationship
 from forms import LoginForm, RegisterForm
 from bs4 import BeautifulSoup
@@ -9,7 +10,7 @@ from flask_wtf import FlaskForm
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 from wtforms import StringField, SubmitField, BooleanField, SelectField
 from wtforms.validators import DataRequired, URL
-from datetime import datetime
+import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
@@ -71,9 +72,17 @@ class Cart(db.Model):
     product = relationship("Product", back_populates="cart")
     user = relationship("User", back_populates="cart")
 
+
+class Discount(db.Model):
+    __tablename__ = "discounts"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(10), nullable=False)
+    percent_sale = db.Column(db.Integer, nullable=False)
+    expiration_date = db.Column(db.Date, nullable=False)
+
+
 # db.drop_all()
 db.create_all()
-
 
 
 @app.route('/')
@@ -82,12 +91,38 @@ def show_main_page():
     return render_template("index.html", products=products)
 
 
+@app.route('/contact')
+def contact():
+    return render_template("contact.html")
+
+
 @app.route('/product/<int:product_id>', methods=["GET", "POST"])
 def view_product(product_id):
 
     requested_product = Product.query.get(product_id)
     if request.method == 'POST':
-        print("weszlo")
+
+        if 'cart' not in session:
+            print("weszlo1")
+
+            session['cart'] = []
+            session['cart'].append({'product_id': requested_product.id, 'size': request.form["size"],
+                                    "quantity": int(request.form["quantity"])})
+        else:
+            for element in session['cart']:
+                if element['product_id'] == requested_product.id and element['size'] == request.form["size"]:
+                    print("weszlo2")
+                    element['quantity'] += int(request.form["quantity"])
+                    break
+                elif element == session['cart'][-1]:
+                    print("weszlo3")
+                    session['cart'].append({'product_id': requested_product.id, 'size': request.form["size"],
+                                            "quantity": int(request.form["quantity"])})
+                    break
+
+        session.modified = True
+        print(session['cart'])
+
         cart = Cart(
             product_id=requested_product.id,
             size=request.form["size"],
@@ -153,7 +188,6 @@ def register():
         login_user(new_user)
         return redirect(url_for("show_main_page"))
 
-
     return render_template("register.html", form=form)
 
 
@@ -161,6 +195,44 @@ def register():
 def logout():
     logout_user()
     return redirect(url_for('show_main_page'))
+
+
+@app.route('/cart')
+def cart():
+    products = Product.query.all()
+    print(products)
+    print(session['cart'])
+    return render_template("cart.html", products=products)
+
+
+@app.route('/change_quantity/<int:element_id>', methods=["POST"])
+def change_quantity(element_id):
+    if request.method == "POST":
+        element = session['cart'][element_id]
+        element["quantity"] = int(request.form["quantity"])
+        session.modified = True
+    return redirect(url_for('cart'))
+
+
+@app.route('/remove_item/<int:element_id>', methods=["POST"])
+def remove_item(element_id):
+    if request.method == "POST":
+        del session['cart'][element_id]
+        session.modified = True
+    return redirect(url_for('cart'))
+
+
+@app.route('/check_discount', methods=["POST"])
+def check_discount():
+    discounts = Discount.query.all()
+    if request.method == "POST":
+        for discount in discounts:
+            if discount.name == request.form["discount"] and discount.expiration_date <= datetime.date.today():
+                if "discount" not in session:
+                    session['discount'] = []
+                session['discount'].append({'name': discount.name, 'percent': discount.percent_sale})
+                break
+    return redirect(url_for('cart'))
 
 
 if __name__ == "__main__":
