@@ -108,7 +108,7 @@ def view_product(product_id):
             session['cart'] = []
             session['cart'].append({'product_id': requested_product.id, 'size': request.form["size"],
                                     "quantity": int(request.form["quantity"])})
-        else:
+        elif session['cart']:
             for element in session['cart']:
                 if element['product_id'] == requested_product.id and element['size'] == request.form["size"]:
                     print("weszlo2")
@@ -119,6 +119,9 @@ def view_product(product_id):
                     session['cart'].append({'product_id': requested_product.id, 'size': request.form["size"],
                                             "quantity": int(request.form["quantity"])})
                     break
+        else:
+            session['cart'].append({'product_id': requested_product.id, 'size': request.form["size"],
+                                    "quantity": int(request.form["quantity"])})
 
         session.modified = True
         print(session['cart'])
@@ -227,11 +230,19 @@ def check_discount():
     discounts = Discount.query.all()
     if request.method == "POST":
         for discount in discounts:
-            if discount.name == request.form["discount"] and discount.expiration_date <= datetime.date.today():
+            if discount.name == request.form["discount"] and discount.expiration_date >= datetime.date.today():
+                print("wszedl post discount")
                 if "discount" not in session:
                     session['discount'] = []
                 session['discount'].append({'name': discount.name, 'percent': discount.percent_sale})
                 break
+    return redirect(url_for('cart'))
+
+
+@app.route('/remove_discount', methods=["POST"])
+def remove_discount():
+    if request.method == "POST":
+        session.pop("discount")
     return redirect(url_for('cart'))
 
 
