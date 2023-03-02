@@ -7,9 +7,7 @@
   <title>Email Confirmation</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style type="text/css">
-  /**
-   * Google webfonts. Recommended to include the .woff version for cross-client compatibility.
-   */
+
   @media screen {
     @font-face {
       font-family: 'Source Sans Pro';
@@ -24,11 +22,7 @@
       src: local('Source Sans Pro Bold'), local('SourceSansPro-Bold'), url(https://fonts.gstatic.com/s/sourcesanspro/v10/toadOcfmlt9b38dHJxOBGFkQc6VGVFSmCnC_l7QZG60.woff) format('woff');
     }
   }
-  /**
-   * Avoid browser level font resizing.
-   * 1. Windows Mobile
-   * 2. iOS / OSX
-   */
+
   body,
   table,
   td,
@@ -36,23 +30,17 @@
     -ms-text-size-adjust: 100%; /* 1 */
     -webkit-text-size-adjust: 100%; /* 2 */
   }
-  /**
-   * Remove extra space added to tables and cells in Outlook.
-   */
+
   table,
   td {
     mso-table-rspace: 0pt;
     mso-table-lspace: 0pt;
   }
-  /**
-   * Better fluid images in Internet Explorer.
-   */
+
   img {
     -ms-interpolation-mode: bicubic;
   }
-  /**
-   * Remove blue links for iOS devices.
-   */
+
   a[x-apple-data-detectors] {
     font-family: inherit !important;
     font-size: inherit !important;
@@ -61,9 +49,7 @@
     color: inherit !important;
     text-decoration: none !important;
   }
-  /**
-   * Fix centering issues in Android 4.4.
-   */
+
   div[style*="margin: 16px 0;"] {
     margin: 0 !important;
   }
@@ -73,9 +59,7 @@
     padding: 0 !important;
     margin: 0 !important;
   }
-  /**
-   * Collapse table borders to avoid space between cells.
-   */
+
   table {
     border-collapse: collapse !important;
   }
@@ -105,7 +89,7 @@
 
     <!-- start logo -->
     <tr>
-      <td align="center" bgcolor="#e9ecef">
+      <td align="center" bgcolor="#edf1ff">
         <!--[if (gte mso 9)|(IE)]>
         <table align="center" border="0" cellpadding="0" cellspacing="0" width="600">
         <tr>
@@ -115,7 +99,7 @@
           <tr>
             <td align="center" valign="top" style="padding: 36px 24px;">
               <a href="https://www.blogdesire.com" target="_blank" style="display: inline-block;">
-                <img src="https://www.blogdesire.com/wp-content/uploads/2019/07/blogdesire-1.png" alt="Logo" border="0" width="48" style="display: block; width: 48px; max-width: 48px; min-width: 48px;">
+                <img src="shopper_logo.png" alt="Logo" border="0" style="display: block; width:300px;">
               </a>
             </td>
           </tr>
@@ -131,7 +115,7 @@
 
     <!-- start hero -->
     <tr>
-      <td align="center" bgcolor="#e9ecef">
+      <td align="center" bgcolor="#edf1ff">
         <!--[if (gte mso 9)|(IE)]>
         <table align="center" border="0" cellpadding="0" cellspacing="0" width="600">
         <tr>
@@ -143,7 +127,7 @@
               <h1 style="margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -1px; line-height: 48px;">Thank you for your order, {{current_user}}</h1>
             </td>
           </tr>
-        </table>
+
         <!--[if (gte mso 9)|(IE)]>
         </td>
         </tr>
@@ -155,7 +139,7 @@
 
     <!-- start copy block -->
     <tr>
-      <td align="center" bgcolor="#e9ecef">
+      <td align="center" bgcolor="#edf1ff">
         <!--[if (gte mso 9)|(IE)]>
         <table align="center" border="0" cellpadding="0" cellspacing="0" width="600">
         <tr>
@@ -166,7 +150,7 @@
           <!-- start copy -->
           <tr>
             <td align="left" bgcolor="#ffffff" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
-              <p style="margin: 0;">Tap the button below to confirm your email address. If you didn't create an account with <a href="https://blogdesire.com">Paste</a>, you can safely delete this email.</p>
+                <p style="margin: 0;">Your [order ID] will be shipped very soon. We will send you an email as soon as your parcel is on its way.</p>
             </td>
           </tr>
           <!-- end copy -->
@@ -179,8 +163,8 @@
                   <td align="center" bgcolor="#ffffff" style="padding: 12px;">
                     <table border="0" cellpadding="0" cellspacing="0">
                       <tr>
-                        <td align="center" bgcolor="#1a82e2" style="border-radius: 6px;">
-                          <a href="https://www.blogdesire.com" target="_blank" style="display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 6px;">Do Something Sweet</a>
+                        <td align="center" bgcolor="#d19c97" style="border-radius: 6px;">
+                          <a href="https://www.blogdesire.com" target="_blank" style="display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 6px;">View your order</a>
                         </td>
                       </tr>
                     </table>
@@ -191,26 +175,108 @@
           </tr>
           <!-- end button -->
 
-          <!-- start copy -->
-          <tr>
-            <td align="left" bgcolor="#ffffff" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
-              <p style="margin: 0;">If that doesn't work, copy and paste the following link in your browser:</p>
-              <p style="margin: 0;"><a href="https://blogdesire.com" target="_blank">https://blogdesire.com/xxx-xxx-xxxx</a></p>
+
+
+{% set total = namespace(value=0) %}
+            <tr>
+            <td align="left" bgcolor="#ffffff" style="font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px;">
+             <h2 style="padding: 0 24px 0;">Order details</h2>
+              <table align="center" border="0" cellpadding="0" cellspacing="0" width="600">
+         <tr>
+    <th>Product</th>
+    <th>Size</th>
+    <th>Quantity</th>
+           <th>Price</th>
+  </tr>
+                {% for element in order_list %}
+  <tr align="center">
+    <td>
+      <img src="{{element['image']}}" alt="" style=" vertical-align:middle; width: 80px;">
+      {{ element['name'] }}
+    </td>
+    <td>{{ element['size'] }}</td>
+    <td>{{ element['quantity'] }}</td>
+    <td>PLN {{element['price'] * element['quantity']}}</td>
+         {% set total.value = total.value + (element['price'] * element['quantity']) %}
+  </tr>
+                {% endfor %}
+
+
+
+    <tr>
+      <td></td>
+      <td></td>
+
+      <th>Subtotal</th>
+      <td align="center">&nbsp; &nbsp; PLN {{ (total.value) | round(2) }}</td>
+
+    </tr>
+
+
+
+
+                   {% if discount_percent != 0: %}
+
+    <tr>
+      <td></td>
+      <td></td>
+
+      <th>Discount</th>
+      <td align="center">- PLN {{ (total.value * (discount_percent/100)) | round(2) }}</td>
+
+    </tr>
+
+                  {% endif %}
+
+
+
+    <tr>
+      <td></td>
+      <td></td>
+
+      <th>Total</th>
+        {% set total.value = total.value - (total.value * (discount_percent/100)) %}
+      <td align="center">&nbsp; &nbsp; PLN {{ (total.value) | round(2) }}</td>
+
+    </tr>
+
+        </table>
             </td>
-
-
           </tr>
-          <!-- end copy -->
+
+      <!--    <tr>
+    <td align="center" bgcolor="#e9ecef">
+        <table align="center" border="0" cellpadding="0" cellspacing="0" width="600">
+         <tr>
+    <th>Company</th>
+    <th>Contact</th>
+    <th>Country</th>
+  </tr>
+  <tr>
+    <td>Alfreds Futterkiste</td>
+    <td>Maria Anders</td>
+    <td>Germany</td>
+  </tr>
+  <tr>
+    <td>Centro comercial Moctezuma</td>
+    <td>Francisco Chang</td>
+    <td>Mexico</td>
+  </tr>
+        </table>
+        </td>
+</tr>-->
 
 
           <!-- start copy -->
           <tr>
             <td align="left" bgcolor="#ffffff" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px; border-bottom: 3px solid #d4dadf">
-              <p style="margin: 0;">Cheers,<br> Paste</p>
+              <p style="margin: 0;">Cheers,<br> E Shopper Team</p>
+
             </td>
 
           </tr>
           <!-- end copy -->
+
 
 
         </table>
@@ -232,7 +298,7 @@
 
     <!-- start footer -->
     <tr>
-      <td align="center" bgcolor="#e9ecef" style="padding: 24px;">
+      <td align="center" bgcolor="#edf1ff" style="padding: 24px;">
         <!--[if (gte mso 9)|(IE)]>
         <table align="center" border="0" cellpadding="0" cellspacing="0" width="600">
         <tr>
@@ -242,7 +308,7 @@
 
           <!-- start permission -->
           <tr>
-            <td align="center" bgcolor="#e9ecef" style="padding: 12px 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 14px; line-height: 20px; color: #666;">
+            <td align="center" bgcolor="#edf1ff" style="padding: 12px 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 14px; line-height: 20px; color: #666;">
               <p style="margin: 0;">You received this email because we received a request for [type_of_action] for your account. If you didn't request [type_of_action] you can safely delete this email.</p>
             </td>
           </tr>
@@ -250,7 +316,7 @@
 
           <!-- start unsubscribe -->
           <tr>
-            <td align="center" bgcolor="#e9ecef" style="padding: 12px 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 14px; line-height: 20px; color: #666;">
+            <td align="center" bgcolor="#edf1ff" style="padding: 12px 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 14px; line-height: 20px; color: #666;">
               <p style="margin: 0;">To stop receiving these emails, you can <a href="https://www.blogdesire.com" target="_blank">unsubscribe</a> at any time.</p>
               <p style="margin: 0;">Paste 1234 S. Broadway St. City, State 12345</p>
             </td>
@@ -266,7 +332,7 @@
       </td>
     </tr>
     <!-- end footer -->
-
+</table>
   </table>
   <!-- end body -->
 
