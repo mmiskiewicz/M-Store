@@ -48,9 +48,8 @@
                         <tr>
                             <td class="align-middle"><img src="{{products[element['product_id'] -1 ].img_url}}" alt="" style="width: 50px;">
                                 {{ products[element["product_id"] -1 ].name }}</td>
-                            {% set subtotal.value = subtotal.value + element["quantity"] %}
                              <td class="align-middle">{{element["size"]}}</td>
-                            <td class="align-middle">${{ products[element['product_id'] -1 ].current_price }}</td>
+                            <td class="align-middle">PLN {{ products[element['product_id'] -1 ].current_price }}</td>
                             <td class="align-middle">
                                 <form method="post" action="{{ url_for('change_quantity', element_id=counter.value) }}">
                                 <div class="input-group quantity_cart mx-auto" style="width: 100px;">
@@ -72,7 +71,7 @@
                                      </form>
                             </td>
                             {% set subtotal.value = subtotal.value + products[element['product_id'] -1 ].current_price * element['quantity'] %}
-                            <td class="align-middle">${{products[element['product_id'] -1 ].current_price * element['quantity']}}</td>
+                            <td class="align-middle">PLN {{products[element['product_id'] -1 ].current_price * element['quantity']}}</td>
                              <form method="post" action="{{ url_for('remove_item', element_id=counter.value) }}">
                                 <td class="align-middle"><button class="btn btn-sm btn-primary"><i class="fa fa-times"></i></button></td>
                              </form>
@@ -199,27 +198,31 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between mb-3 pt-1">
                             <h6 class="font-weight-medium">Subtotal</h6>
-                            <h6 class="font-weight-medium">${{subtotal.value}}</h6>
+                            <h6 class="font-weight-medium">PLN {{subtotal.value}}</h6>
                         </div>
                         {% if "discount" in session %}
                          <div class="d-flex justify-content-between mb-3 pt-1">
                             <h6 class="font-weight-medium">Discount</h6>
-                            <h6 class="font-weight-medium">- ${{subtotal.value * (session["discount"][0]["percent"]/100)}}</h6>
+                            <h6 class="font-weight-medium">- PLN {{ (subtotal.value * (session["discount"][0]["percent"]/100)) | round(2) }}</h6>
                         </div>
                         {% set subtotal.value = subtotal.value - (subtotal.value * (session["discount"][0]["percent"]/100)) %}
                         {% endif %}
                         <div class="d-flex justify-content-between">
                             <h6 class="font-weight-medium">Shipping</h6>
-                            <h6 class="font-weight-medium">$10</h6>
+                            <h6 class="font-weight-medium">FREE!</h6>
                         </div>
                     </div>
                     <div class="card-footer border-secondary bg-transparent">
                         <div class="d-flex justify-content-between mt-2">
                             <h5 class="font-weight-bold">Total</h5>
-                            {% set total = subtotal.value + 10 %}
-                            <h5 class="font-weight-bold">${{total}}</h5>
+                            {% set total = subtotal.value %}
+                            <h5 class="font-weight-bold">PLN {{total}}</h5>
                         </div>
-                        <button class="btn btn-block btn-primary my-3 py-3">Proceed To Checkout</button>
+ <form action="/create-checkout-session" method="POST">
+                       <!-- <button href="#" class="btn btn-block btn-primary my-3 py-3">Proceed To Checkout</button>-->
+
+     <button type="submit" class="btn btn-block btn-primary my-3 py-3" id="checkout-button">Proceed To Checkout</button>
+ </form>
                     </div>
                 </div>
             </div>
