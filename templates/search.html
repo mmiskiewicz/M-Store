@@ -1,0 +1,147 @@
+{% include "header.html" %}
+
+
+    <!-- Page Header Start -->
+    <div class="container-fluid bg-secondary mb-5">
+        <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 100px">
+
+      {% set sizes = [] %}
+    {% for product in all_products %}
+        {% set temp_sizes = product.available_sizes.split("'")[1::2] %}
+        {% for size in temp_sizes %}
+            {% if size not in sizes %}
+                {{ sizes.append(size) | default("", True) }}
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+
+
+
+   <form method="post">
+
+<center>
+<div id="accordion" >
+ <div id="anotherList" class="dropdown-check-list">
+       <span class="anchor" data-toggle="collapse" data-target="#collapseOne">Price range</span>
+<div class="collapse" id="collapseOne" data-parent="#accordion">
+      <ul class="items">
+          <li class="border-bottom">
+
+                     {% set max = products|map(attribute='current_price')|max() %}
+            {% set min = products|map(attribute='current_price')|min() %}
+          <div class="price-content" style="font-size: 0.7em;">
+        <div>
+          <label>Min</label>
+          <p id="min-value">PLN {{min_price}}</p>
+        </div>
+
+        <div>
+          <label>Max</label>
+          <p id="max-value">PLN {{max_price}}</p>
+        </div>
+      </div>
+
+        <div class="range-slider">
+
+
+          <input type="range" name="min-price" class="price-range min-price" value="{{min_price}}" min="{{general_min_price}}" max="{{general_max_price}}" step="1">
+          <input type="range" name="max-price" class="price-range max-price" value="{{max_price}}" min="{{general_min_price}}" max="{{general_max_price}}" step="1">
+        </div>
+
+
+          </li>
+              <center><button name="filter-gender" style="height:30px; padding:5px; font-size:13px;" class="btn btn-primary">Filter</button></center>
+      </ul>
+</div>
+
+    </div>
+
+
+
+<div id="sizes-list" class="dropdown-check-list" tabindex="100">
+   <span class="anchor" data-toggle="collapse" data-target="#collapseTwo">Select Sizes</span>
+<div class="collapse" id="collapseTwo" data-parent="#accordion">
+      <ul class="items">
+      {% for size in sizes %}
+      {% if size in sizes_list %}
+    <li><input name="size" type="checkbox" value="{{size}}" checked/>{{size}} </li>
+      {% else %}
+         <li><input name="size" type="checkbox" value="{{size}}" />{{size}} </li>
+      {% endif %}
+      {% endfor %}
+    <center><button name="filter-gender" style="height:30px; padding:5px; font-size:13px;" class="btn btn-primary">Filter</button></center>
+  </ul>
+</div>
+</div>
+
+    <div id="gender-list" class="dropdown-check-list" tabindex="100">
+   <span class="anchor" data-toggle="collapse" data-target="#collapseThree">Select Gender</span>
+<div class="collapse" id="collapseThree" data-parent="#accordion">
+      <ul class="items">
+      {% set all_genders = ["Women", "Men"] %}
+      {% for gender in all_genders %}
+      {% if gender in gender_list %}
+    <li><input name="sex" value="{{gender}}" type="checkbox" checked/>{{gender}}</li>
+      {% else %}
+     <li><input name="sex" value="{{gender}}" type="checkbox" />{{gender}}</li>
+      {% endif %}
+      {% endfor %}
+         <center><button name="filter-gender" style="height:30px; padding:5px; font-size:13px;" class="btn btn-primary">Filter</button></center>
+  </ul>
+</div>
+</div>
+
+</div>
+</center>
+    </form>
+
+        </div>
+    </div>
+    <!-- Page Header End -->
+
+
+
+
+
+
+
+
+
+
+
+
+   <div class="container-fluid pt-5">
+        <div class="text-center mb-4">
+            <h2 class="section-title px-5"><span class="px-2">Search Results</span></h2>
+        </div>
+
+        <div class="row px-xl-5 pb-3">
+            {% for product in products %}
+
+            <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+                 <a href="{{ url_for('view_product', product_id=product.id) }}" style="text-decoration:none">
+                <div class="card product-item border-0 mb-4">
+                    <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
+                        <img class="img-fluid w-100" src="{{product.img_url}}" alt="">
+                    </div>
+                    <div class="card-body border-left border-right border-bottom text-center p-0 pt-4 pb-3">
+                        <h6 class="text-truncate mb-3">{{product.name}}</h6>
+                        <div class="d-flex justify-content-center">
+                            <h6>PLN {{product.current_price}}</h6><h6 class="text-muted ml-2"><del>PLN {{product.original_price}}</del></h6>
+                        </div>
+                    </div>
+
+                </div>
+                      </a>
+            </div>
+
+            {% endfor %}
+        </div>
+
+    </div>
+
+
+
+
+
+{% include "footer.html" %}
