@@ -1,8 +1,10 @@
 {% include "header.html" %}
 
 
+
+
     <!-- Page Header Start -->
-    <div class="container-fluid bg-secondary mb-5">
+    <div class="container-fluid bg-secondary">
         <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 100px">
 
       {% set sizes = [] %}
@@ -14,6 +16,7 @@
             {% endif %}
         {% endfor %}
     {% endfor %}
+
 
 
 
@@ -50,7 +53,7 @@
 
 
           </li>
-              <center><button name="filter-gender" style="height:30px; padding:5px; font-size:13px;" class="btn btn-primary">Filter</button></center>
+              <center><button name="filter-gender" style="height:30px; padding:5px; font-size:13px; margin-top:2px;" class="btn btn-primary">Filter</button></center>
       </ul>
 </div>
 
@@ -69,7 +72,8 @@
          <li><input name="size" type="checkbox" value="{{size}}" />{{size}} </li>
       {% endif %}
       {% endfor %}
-    <center><button name="filter-gender" style="height:30px; padding:5px; font-size:13px;" class="btn btn-primary">Filter</button></center>
+          <div class="border-bottom"></div>
+    <center><button name="filter-gender" style="height:30px; padding:5px; font-size:13px; margin-top:2px;" class="btn btn-primary">Filter</button></center>
   </ul>
 </div>
 </div>
@@ -86,7 +90,8 @@
      <li><input name="sex" value="{{gender}}" type="checkbox" />{{gender}}</li>
       {% endif %}
       {% endfor %}
-         <center><button name="filter-gender" style="height:30px; padding:5px; font-size:13px;" class="btn btn-primary">Filter</button></center>
+             <div class="border-bottom"></div>
+         <center><button name="filter-gender" style="height:30px; padding:5px; font-size:13px; margin-top:2px;" class="btn btn-primary">Filter</button></center>
   </ul>
 </div>
 </div>
@@ -106,14 +111,16 @@
 
 
 
+ {% if not products[0] %}
+
+    <p class="text-center mt-5">There are no results matching your search criteria.</p>
+    {% else %}
 
 
 
 
    <div class="container-fluid pt-5">
-        <div class="text-center mb-4">
-            <h2 class="section-title px-5"><span class="px-2">Search Results</span></h2>
-        </div>
+
 
         <div class="row px-xl-5 pb-3">
             {% for product in products %}
@@ -140,7 +147,7 @@
 
     </div>
 
-
+{% endif %}
 
 
 
