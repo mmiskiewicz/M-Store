@@ -1,10 +1,4 @@
-/******* Bootstrap Theming ********/
-/*!
- * Bootstrap v4.5.3 (https://getbootstrap.com/)
- * Copyright 2011-2020 The Bootstrap Authors
- * Copyright 2011-2020 Twitter, Inc.
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
- */
+
 :root {
   --blue: #007bff;
   --indigo: #6610f2;
@@ -1881,9 +1875,9 @@ pre code {
   font-weight: 400;
   line-height: 1.5;
   color: #495057;
-  background-color: #fff;
+  background-color: #edf1ff;
   background-clip: padding-box;
-  border: 1px solid #EDF1FF;
+  border: 1px solid #d7e0ff;
   border-radius: 0;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
@@ -9581,4 +9575,155 @@ a.text-dark:hover, a.text-dark:focus {
   100% {
     transform: translateY(-15px);
   }
+}
+
+
+#rating_bar > input {
+appearance: none;
+color: #d19c97;
+}
+#rating_bar:hover > input:before {
+font-weight:900;
+
+}
+
+#rating_bar > input:hover ~ input:before {
+    font-weight:400; }
+
+#rating_bar > input:not(:checked)   {
+    font-weight:900;
+}
+
+#rating_bar > input:checked ~ input:before {
+    font-weight:400;
+}
+
+#rating_bar > input:checked {
+    font-weight:900;
+}
+
+.card_price{
+  width: 400px;
+  background-color: #fff;
+  border-radius: 5px;
+  padding: 20px;
+}
+
+.price-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 0;
+}
+
+.range-slider {
+  width: 147px;
+  position: relative;
+  margin: 0 0 15px 0;
+}
+
+input[type=range] {
+  -webkit-appearance: none;
+  width: 100%;
+  background: transparent;
+  position: absolute;
+  left: 0;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  background: #d19c97;
+  cursor: pointer;
+  margin-top: -5px;
+  position: relative;
+  z-index: 1;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 5px;
+  background: #e8e8e8;
+  border-radius: 3px;
+  border: none;
+}
+
+
+.dropdown-check-list {
+  display: inline-block;
+}
+
+.dropdown-check-list .anchor {
+  position: relative;
+  cursor: pointer;
+  display: inline-block;
+  padding: 5px 50px 5px 10px;
+  border: 1px solid #ccc;
+}
+
+.dropdown-check-list .anchor:after {
+  position: absolute;
+  content: "";
+  border-left: 2px solid black;
+  border-top: 2px solid black;
+  padding: 5px;
+  right: 10px;
+  top: 20%;
+  -moz-transform: rotate(-135deg);
+  -ms-transform: rotate(-135deg);
+  -o-transform: rotate(-135deg);
+  -webkit-transform: rotate(-135deg);
+  transform: rotate(-135deg);
+}
+
+.dropdown-check-list .anchor:active:after {
+  right: 8px;
+  top: 21%;
+}
+
+.dropdown-check-list ul.items {
+  padding: 2px;
+
+  margin: 0;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+
+.dropdown-check-list ul.items li {
+  list-style: none;
+  accent-color: #d19c97;
+}
+
+.dropdown-check-list.visible .anchor {
+
+}
+
+.dropdown-check-list.visible .items {
+  display: block;
+}
+
+.items li{
+text-align: left;
+}
+
+.dropdown-check-list{
+background-color:white;
+}
+
+.help-block{
+  color: #d19c97;
+}
+
+.range-slider-full {
+  width: 100%;
+  position: relative;
+  margin: 0 0 15px 0;
+}
+
+ul.no-bullets {
+  list-style-type: none; /* Remove bullets */
+  padding: 0; /* Remove padding */
+  margin: 0; /* Remove margins */
 }
