@@ -122,10 +122,9 @@
                     <td align="left" bgcolor="#ffffff"
                         style="padding: 36px 24px 0; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; border-top: 3px solid #d4dadf;">
                         <h1 style="margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -1px; line-height: 48px;">
-                            Password Reset</h1>
+                            Thank you for your order, {{current_user}}!</h1>
                     </td>
                 </tr>
-
                 <!--[if (gte mso 9)|(IE)]>
                 </td>
                 </tr>
@@ -134,7 +133,6 @@
                 </td>
                 </tr>
                 <!-- end hero -->
-
                 <!-- start copy block -->
                 <tr>
                     <td align="center" bgcolor="#edf1ff">
@@ -144,17 +142,15 @@
                                 <td align="center" valign="top" width="600">
                         <![endif]-->
                         <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
-
                             <!-- start copy -->
                             <tr>
                                 <td align="left" bgcolor="#ffffff"
                                     style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
-                                    <p style="margin: 0;">Hi there! We've heard that you lost your password. Use the
-                                        link down bellow to reset it. Keep in mind it will remain active for 1 hour.</p>
+                                    <p style="margin: 0;">Your order #{{order_id}} will be shipped very soon. We will
+                                        send you an email as soon as your parcel is on its way.</p>
                                 </td>
                             </tr>
                             <!-- end copy -->
-
                             <!-- start button -->
                             <tr>
                                 <td align="left" bgcolor="#ffffff">
@@ -165,9 +161,10 @@
                                                     <tr>
                                                         <td align="center" bgcolor="#d19c97"
                                                             style="border-radius: 6px;">
-                                                            <a href="{{link}}" target="_blank"
-                                                               style="display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 6px;">Reset
-                                                                password</a>
+                                                            <a href="http://127.0.0.1:5000/order/{{order_id}}"
+                                                               target="_blank"
+                                                               style="display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 6px;">View
+                                                                your order</a>
                                                         </td>
                                                     </tr>
                                                 </table>
@@ -177,6 +174,67 @@
                                 </td>
                             </tr>
                             <!-- end button -->
+
+                            {% set total = namespace(value=0) %}
+                            <tr>
+                                <td align="left" bgcolor="#ffffff"
+                                    style="font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px;">
+                                    <h2 style="padding: 0 24px 0;">Order details</h2>
+                                    <table align="center" border="0" cellpadding="0" cellspacing="0" width="600">
+                                        <tr align="center">
+                                            <th colspan="2">Product</th>
+                                            <th>Size</th>
+                                            <th>Quantity</th>
+                                            <th>Price</th>
+                                        </tr>
+                                        {% for element in order_list %}
+                                        <tr align="center">
+                                            <td>
+                                                <img src="{{element['image']}}" alt=""
+                                                     style=" vertical-align:middle; width: 80px;">
+                                            </td>
+                                            <td>
+                                                {{ element['name'] }}
+                                            </td>
+                                            <td>{{ element['size'] }}</td>
+                                            <td>{{ element['quantity'] }}</td>
+                                            <td>PLN {{element['price'] * element['quantity']}}</td>
+                                            {% set total.value = total.value + (element['price'] * element['quantity'])
+                                            %}
+                                        </tr>
+                                        {% endfor %}
+
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <th>Subtotal</th>
+                                            <td align="center">&nbsp; &nbsp; PLN {{ (total.value) | round(2) }}</td>
+                                        </tr>
+
+                                        {% if discount_percent != 0: %}
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <th>Discount</th>
+                                            <td align="center">- PLN {{ (total.value * (discount_percent/100)) |
+                                                round(2) }}
+                                            </td>
+                                        </tr>
+
+                                        {% endif %}
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <th>Total</th>
+                                            {% set total.value = total.value - (total.value * (discount_percent/100)) %}
+                                            <td align="center">&nbsp; &nbsp; PLN {{ (total.value) | round(2) }}</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
 
                             <!-- start copy -->
                             <tr>
@@ -188,7 +246,6 @@
                             <!-- end copy -->
 
                         </table>
-
                         <!--[if (gte mso 9)|(IE)]>
                         </td>
                         </tr>

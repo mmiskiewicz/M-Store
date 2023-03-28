@@ -1,19 +1,14 @@
 {% include "header.html" %}
 
-
-    <!-- Page Header Start -->
-    <div class="container-fluid bg-secondary mb-5">
-        <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
-            <h1 class="font-weight-semi-bold text-uppercase mb-3">Newsletter</h1>
-            <div class="d-inline-flex">
-                <p class="m-0"><a href="">Home</a></p>
-                <p class="m-0 px-2">-</p>
-                <p class="m-0">Contact</p>
-            </div>
+    <!-- Header Start -->
+<div class="container-fluid bg-secondary">
+        <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 100px">
+             <h1 class="font-weight-semi-bold text-uppercase mb-3" style="margin-top:13px;">Newsletter</h1>
         </div>
-    </div>
-    <!-- Page Header End -->
+        </div>
+    <!-- Header End -->
 
-<p class="text-center">{{message}}</p>
+<!-- Message To The User -->
+<p class="text-center" style="margin:40px 0 40px 0;">{{message}}</p>
 
 {% include "footer.html" %}

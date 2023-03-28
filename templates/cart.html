@@ -1,233 +1,181 @@
 {% include "header.html" %}
 
-    <!-- Page Header Start -->
-    <div class="container-fluid bg-secondary mb-5">
-        <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
-            <h1 class="font-weight-semi-bold text-uppercase mb-3">Shopping Cart</h1>
-            <div class="d-inline-flex">
-                <p class="m-0"><a href="">Home</a></p>
-                <p class="m-0 px-2">-</p>
-                <p class="m-0">Shopping Cart</p>
-            </div>
-        </div>
+<!-- Header Start -->
+<div class="container-fluid bg-secondary">
+    <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 100px">
+        <h1 class="font-weight-semi-bold text-uppercase mb-3" style="margin-top:13px;">Shopping cart</h1>
     </div>
-    <!-- Page Header End -->
+</div>
+<!-- Header End -->
 
 
-    <!-- Cart Start -->
-    <div class="container-fluid pt-5">
-        <div class="row px-xl-5">
-            <div class="col-lg-8 table-responsive mb-5">
-                <table class="table table-bordered text-center mb-0">
-                    <thead class="bg-secondary text-dark">
-                        <tr>
-                            <th>Products</th>
-                            <th>Size</th>
-                            <th>Price</th>
-                            <th>Quantity</th>
-                            <th>Total</th>
-                            <th>Remove</th>
-                        </tr>
-                    </thead>
-                    <tbody class="align-middle">
-                    <!--{% if "cart" in session: %}
-                        {% set quantity = namespace(value=0) %}
-                        {% for element in session["cart"]: %}
-                            {% set quantity.value = quantity.value + element["quantity"] %}
-                        {% endfor %}
-                         <span class="badge">{{ quantity.value }}</span>
-                    {% else: %}
-                        <span class="badge">0</span>
-                    {% endif %}-->
-
-
-                    {% set subtotal = namespace(value=0) %}
-                    {% set counter = namespace(value=0) %}
-                    {% if "cart" in session: %}
-                        {% for element in session["cart"]: %}
-                        <tr>
-                            <td class="align-middle"><img src="{{products[element['product_id'] -1 ].img_url}}" alt="" style="width: 50px;">
-                                {{ products[element["product_id"] -1 ].name }}</td>
-                             <td class="align-middle">{{element["size"]}}</td>
-                            <td class="align-middle">PLN {{ products[element['product_id'] -1 ].current_price }}</td>
-                            <td class="align-middle">
-                                <form method="post" action="{{ url_for('change_quantity', element_id=counter.value) }}">
-                                <div class="input-group quantity_cart mx-auto" style="width: 100px;">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary btn-minus" >
+<div class="container-fluid pt-5">
+    <div class="row px-xl-5">
+        <div class="col-lg-8 table-responsive mb-5">
+            <!-- Products Table Start -->
+            <table class="table table-bordered text-center mb-0">
+                <thead class="bg-secondary text-dark">
+                <tr>
+                    <th colspan="2">Product</th>
+                    <th>Size</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                    <th>Remove</th>
+                </tr>
+                </thead>
+                <tbody class="align-middle">
+                {% set subtotal = namespace(value=0) %}
+                {% set counter = namespace(value=0) %}
+                {% if "cart" in session: %}
+                {% if session["cart"] | length == 0 %}
+                <tr>
+                    <td class="align-middle" colspan="7">There are no items in your cart.</td>
+                </tr>
+                {% else %}
+                {% for element in session["cart"]: %}
+                <tr>
+                    <td class="align-middle"><img src="{{products[element['product_id'] -1 ].img_url}}" alt=""
+                                                  style="width: 50px;">
+                    </td>
+                    <td class="align-middle">
+                        {{ products[element["product_id"] -1 ].name }}
+                    </td>
+                    <td class="align-middle">{{element["size"]}}</td>
+                    <td class="align-middle">PLN {{ products[element['product_id'] -1 ].current_price }}</td>
+                    <td class="align-middle">
+                        <form method="post" action="{{ url_for('change_quantity', element_id=counter.value) }}">
+                            <div class="input-group quantity_cart mx-auto" style="width: 100px;">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-sm btn-primary btn-minus">
                                         <i class="fa fa-minus"></i>
-                                        </button>
-                                    </div>
-
-                                    <input name="quantity" type="text" class="form-control form-control-sm bg-secondary text-center" value="{{element['quantity']}}">
-
-                                        <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary btn-plus">
-                                            <i class="fa fa-plus"></i>
-                                        </button>
-                                    </div>
-
+                                    </button>
                                 </div>
-                                     </form>
-                            </td>
-                            {% set subtotal.value = subtotal.value + products[element['product_id'] -1 ].current_price * element['quantity'] %}
-                            <td class="align-middle">PLN {{products[element['product_id'] -1 ].current_price * element['quantity']}}</td>
-                             <form method="post" action="{{ url_for('remove_item', element_id=counter.value) }}">
-                                <td class="align-middle"><button class="btn btn-sm btn-primary"><i class="fa fa-times"></i></button></td>
-                             </form>
-                            {% set counter.value = counter.value + 1 %}
-                        </tr>
- {% endfor %}
-{% endif %}
 
-                      <!--  <tr>
-                            <td class="align-middle"><img src="/static/img/product-2.jpg" alt="" style="width: 50px;"> Colorful Stylish Shirt</td>
-                            <td class="align-middle">$150</td>
-                            <td class="align-middle">
-                                <div class="input-group quantity mx-auto" style="width: 100px;">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary btn-minus" >
-                                        <i class="fa fa-minus"></i>
-                                        </button>
-                                    </div>
-                                    <input type="text" class="form-control form-control-sm bg-secondary text-center" value="1">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary btn-plus">
-                                            <i class="fa fa-plus"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="align-middle">$150</td>
-                            <td class="align-middle"><button class="btn btn-sm btn-primary"><i class="fa fa-times"></i></button></td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle"><img src="/static/img/product-3.jpg" alt="" style="width: 50px;"> Colorful Stylish Shirt</td>
-                            <td class="align-middle">$150</td>
-                            <td class="align-middle">
-                                <div class="input-group quantity mx-auto" style="width: 100px;">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary btn-minus" >
-                                        <i class="fa fa-minus"></i>
-                                        </button>
-                                    </div>
-                                    <input type="text" class="form-control form-control-sm bg-secondary text-center" value="1">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary btn-plus">
-                                            <i class="fa fa-plus"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="align-middle">$150</td>
-                            <td class="align-middle"><button class="btn btn-sm btn-primary"><i class="fa fa-times"></i></button></td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle"><img src="/static/img/product-4.jpg" alt="" style="width: 50px;"> Colorful Stylish Shirt</td>
-                            <td class="align-middle">$150</td>
-                            <td class="align-middle">
-                                <div class="input-group quantity mx-auto" style="width: 100px;">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary btn-minus" >
-                                        <i class="fa fa-minus"></i>
-                                        </button>
-                                    </div>
-                                    <input type="text" class="form-control form-control-sm bg-secondary text-center" value="1">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary btn-plus">
-                                            <i class="fa fa-plus"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="align-middle">$150</td>
-                            <td class="align-middle"><button class="btn btn-sm btn-primary"><i class="fa fa-times"></i></button></td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle"><img src="/static/img/product-5.jpg" alt="" style="width: 50px;"> Colorful Stylish Shirt</td>
-                            <td class="align-middle">$150</td>
-                            <td class="align-middle">
-                                <div class="input-group quantity mx-auto" style="width: 100px;">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary btn-minus" >
-                                        <i class="fa fa-minus"></i>
-                                        </button>
-                                    </div>
-                                    <input type="text" class="form-control form-control-sm bg-secondary text-center" value="1">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary btn-plus">
-                                            <i class="fa fa-plus"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="align-middle">$150</td>
-                            <td class="align-middle"><button class="btn btn-sm btn-primary"><i class="fa fa-times"></i></button></td>
-                        </tr>-->
-                    </tbody>
-                </table>
-            </div>
-            <div class="col-lg-4">
+                                <input name="quantity" type="text"
+                                       class="form-control form-control-sm bg-secondary text-center"
+                                       value="{{element['quantity']}}" readonly>
 
-                 {% if "discount" in session: %}
-                 <form method="post" action="{{ url_for('remove_discount') }}">
-                         <h5 class="font-weight-bold">{{session["discount"][0]["name"]}}
-                             <button class="btn btn-sm btn-primary"><i class="fa fa-times"></i></button></h5>
-                 </form>
+                                <div class="input-group-btn">
+                                    <button class="btn btn-sm btn-primary btn-plus">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                </div>
+
+                            </div>
+                        </form>
+                    </td>
+                    {% set subtotal.value = subtotal.value + products[element['product_id'] -1 ].current_price *
+                    element['quantity'] %}
+                    <td class="align-middle">PLN {{products[element['product_id'] -1 ].current_price *
+                        element['quantity']}}
+                    </td>
+                    <form method="post" action="{{ url_for('remove_item', element_id=counter.value) }}">
+                        <td class="align-middle">
+                            <button class="btn btn-sm btn-primary"><i class="fa fa-times"></i></button>
+                        </td>
+                    </form>
+                    {% set counter.value = counter.value + 1 %}
+                </tr>
+
+                {% endfor %}
                 {% endif %}
 
-                <form class="mb-5" method="post" action="{{ url_for('check_discount') }}">
-                    <div class="input-group">
-                        <input type="text" name="discount" class="form-control p-4" placeholder="Coupon Code">
-                        <div class="input-group-append">
-                            <button class="btn btn-primary">Apply Coupon</button>
-                        </div>
+                {% else %}
+                <tr>
+                    <td class="align-middle" colspan="7">There are no items in your cart.</td>
+                </tr>
 
+                {% endif %}
+                </tbody>
+            </table>
+             <!-- Products Table End -->
+        </div>
+
+        <!-- Discounts And Cart Summary Start -->
+        <div class="col-lg-4">
+            {% if "discount" in session: %}
+            <form method="post" action="{{ url_for('remove_discount') }}">
+                <h5 class="font-weight-bold">{{session["discount"][0]["name"]}}
+                    <button class="btn btn-sm btn-primary"><i class="fa fa-times"></i></button>
+                </h5>
+            </form>
+            {% endif %}
+
+            <form class="mb-5" method="post" action="{{ url_for('check_discount') }}">
+                <div class="input-group">
+                    <input type="text" name="discount" class="form-control p-4" placeholder="Coupon Code">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary">Apply Coupon</button>
                     </div>
-
-
-                </form>
-
-
-
-
-                <div class="card border-secondary mb-5">
-                    <div class="card-header bg-secondary border-0">
-                        <h4 class="font-weight-semi-bold m-0">Cart Summary</h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between mb-3 pt-1">
-                            <h6 class="font-weight-medium">Subtotal</h6>
-                            <h6 class="font-weight-medium">PLN {{subtotal.value}}</h6>
-                        </div>
-                        {% if "discount" in session %}
-                         <div class="d-flex justify-content-between mb-3 pt-1">
-                            <h6 class="font-weight-medium">Discount</h6>
-                            <h6 class="font-weight-medium">- PLN {{ (subtotal.value * (session["discount"][0]["percent"]/100)) | round(2) }}</h6>
-                        </div>
-                        {% set subtotal.value = subtotal.value - (subtotal.value * (session["discount"][0]["percent"]/100)) %}
+                </div>
+                <div class="col-lg-12 col-md-5 mx-auto text-center" style="margin-top:40px;">
+                    {% with discount_messages = get_flashed_messages() %}
+                    {% if discount_messages %}
+                    <ul style="list-style-type: none; margin: 0 0 15px 0; padding: 0; color:#c17a74;" class=flashes>
+                        {% for message in discount_messages %}
+                        {% if message != "You have to be logged in to buy products." and message != "Please add products to your cart." and message != "Please add items to your cart." %}
+                        <li>{{ message }}</li>
                         {% endif %}
-                        <div class="d-flex justify-content-between">
-                            <h6 class="font-weight-medium">Shipping</h6>
-                            <h6 class="font-weight-medium">FREE!</h6>
-                        </div>
-                    </div>
-                    <div class="card-footer border-secondary bg-transparent">
-                        <div class="d-flex justify-content-between mt-2">
-                            <h5 class="font-weight-bold">Total</h5>
-                            {% set total = subtotal.value %}
-                            <h5 class="font-weight-bold">PLN {{total}}</h5>
-                        </div>
- <form action="/create-checkout-session" method="POST">
-                       <!-- <button href="#" class="btn btn-block btn-primary my-3 py-3">Proceed To Checkout</button>-->
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                    {% endwith %}
+                </div>
+            </form>
 
-     <button type="submit" class="btn btn-block btn-primary my-3 py-3" id="checkout-button">Proceed To Checkout</button>
- </form>
+            <div class="card border-secondary mb-5">
+                <div class="card-header bg-secondary border-0">
+                    <h4 class="font-weight-semi-bold m-0">Cart Summary</h4>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-3 pt-1">
+                        <h6 class="font-weight-medium">Subtotal</h6>
+                        <h6 class="font-weight-medium">PLN {{subtotal.value}}</h6>
+                    </div>
+                    {% if "discount" in session %}
+                    <div class="d-flex justify-content-between mb-3 pt-1">
+                        <h6 class="font-weight-medium">Discount</h6>
+                        <h6 class="font-weight-medium">- PLN {{ (subtotal.value *
+                            (session["discount"][0]["percent"]/100)) | round(2) }}</h6>
+                    </div>
+                    {% set subtotal.value = (subtotal.value - (subtotal.value * (session["discount"][0]["percent"]/100))) | round(2)
+                    %}
+                    {% endif %}
+                    <div class="d-flex justify-content-between">
+                        <h6 class="font-weight-medium">Shipping</h6>
+                        <h6 class="font-weight-medium">FREE!</h6>
+                    </div>
+                </div>
+                <div class="card-footer border-secondary bg-transparent">
+                    <div class="d-flex justify-content-between mt-2">
+                        <h5 class="font-weight-bold">Total</h5>
+                        {% set total = subtotal.value %}
+                        <h5 class="font-weight-bold">PLN {{total}}</h5>
+                    </div>
+                    <form action="/create-checkout-session" method="POST">
+                        <button type="submit" class="btn btn-block btn-primary my-3 py-3" id="checkout-button">Proceed
+                            To Checkout
+                        </button>
+                    </form>
+                    <div class="col-lg-12 col-md-5 mx-auto text-center" style="margin-top:40px;">
+                        {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                        <ul style="list-style-type: none; margin: 0 0 15px 0; padding: 0; color:#c17a74;" class=flashes>
+                            {% for message in messages %}
+                            {% if message != "That discount doesn't exist or it has expired." %}
+                            <li>{{ message }}</li>
+                            {% endif %}
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                        {% endwith %}
                     </div>
                 </div>
             </div>
         </div>
+           <!-- Discounts And Cart Summary End -->
     </div>
-    <!-- Cart End -->
+</div>
 
 {% include "footer.html" %}

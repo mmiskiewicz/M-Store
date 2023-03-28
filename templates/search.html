@@ -1,154 +1,205 @@
 {% include "header.html" %}
 
+<!-- Header Start -->
+<div class="container-fluid bg-secondary">
+    <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 100px">
+        <h1 class="font-weight-semi-bold text-uppercase mb-3" style="margin-top:13px;">Search results</h1>
+    </div>
+</div>
+<!-- Header End -->
 
+<form method="post" action="{{ url_for('search', q=search_query, sort_by=sort_by) }}">
+    <div class="container-fluid pt-5">
+        <div class="row px-xl-5">
+            <!-- Sidebar Filter Start -->
+            <div class="col-lg-3 col-md-12">
+                {% if search_query != "" %}
+                <div class="border-bottom mb-4 pb-1">
+                    <h3 class="font-weight-semi-bold">'{{search_query}}'</h3>
+                </div>
+                {% endif %}
+                <!-- Price Filter Start -->
+                <div class="border-bottom mb-4 pb-4">
+                    <h5 class="font-weight-semi-bold mb-4">Filter by price</h5>
+                    <ul class="items no-bullets">
+                        <li>
+                            <div class="price-content">
+                                <div>
+                                    <label>Min</label>
+                                    <p id="min-value">PLN {{min_price}}</p>
+                                </div>
+                                <div>
+                                    <label>Max</label>
+                                    <p id="max-value">PLN {{max_price}}</p>
+                                </div>
+                            </div>
+                            <div class="range-slider-full">
+                                <input type="range" name="min-price" class="price-range min-price" value="{{min_price}}"
+                                       min="{{general_min_price}}" max="{{general_max_price}}" step="1">
+                                <input type="range" name="max-price" class="price-range max-price" value="{{max_price}}"
+                                       min="{{general_min_price}}" max="{{general_max_price}}" step="1">
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <!-- Price Filter End -->
 
+                <!-- Size Filter Start -->
+                <div class="border-bottom mb-4 pb-4">
+                    <h5 class="font-weight-semi-bold mb-4">Filter by size</h5>
+                    {% set i = namespace(value=0) %}
+                    {% for size in sizes %}
+                    <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                        {% if size in sizes_list %}
+                        <input name="size" value="{{size}}" type="checkbox" class="custom-control-input" checked
+                               id="size-{{size}}">
+                        {% else %}
+                        <input name="size" value="{{size}}" type="checkbox" class="custom-control-input"
+                               id="size-{{size}}">
+                        {% endif %}
+                        <label class="custom-control-label" for="size-{{size}}">{{size}}</label>
+                        <span class="badge border font-weight-normal">{{sizes_quantity[i.value]}}</span>
+                    </div>
+                    {% set i.value = i.value + 1 %}
+                    {% endfor %}
+                    {% if i.value == 0 %}
+                    <p>No sizes available.</p>
+                    {% endif %}
+                </div>
+                <!-- Size Filter End -->
 
-    <!-- Page Header Start -->
-    <div class="container-fluid bg-secondary">
-        <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 100px">
+                {% set all_genders = ["Men", "Women"] %}
 
-      {% set sizes = [] %}
-    {% for product in all_products %}
-        {% set temp_sizes = product.available_sizes.split("'")[1::2] %}
-        {% for size in temp_sizes %}
-            {% if size not in sizes %}
-                {{ sizes.append(size) | default("", True) }}
-            {% endif %}
-        {% endfor %}
-    {% endfor %}
-
-
-
-
-   <form method="post">
-
+                <!-- Gender Filter Start -->
+                <div class="mb-5">
+                    <h5 class="font-weight-semi-bold mb-4">Filter by gender</h5>
+                    {% set i = namespace(value=0) %}
+                    {% for gender in all_genders %}
+                    <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                        {% if gender in gender_list %}
+                        <input name="sex" value="{{gender}}" type="checkbox" class="custom-control-input" checked
+                               id="gender-{{gender}}">
+                        {% else %}
+                        <input name="sex" value="{{gender}}" type="checkbox" class="custom-control-input"
+                               id="gender-{{gender}}">
+                        {% endif %}
+                        <label class="custom-control-label" for="gender-{{gender}}">{{gender}}</label>
+                        <span class="badge border font-weight-normal">{{gender_quantity[i.value]}}</span>
+                    </div>
+                    {% set i.value = i.value + 1 %}
+                    {% endfor %}
+                </div>
+                <!-- Gender Filter End -->
+</form>
 <center>
-<div id="accordion" >
- <div id="anotherList" class="dropdown-check-list">
-       <span class="anchor" data-toggle="collapse" data-target="#collapseOne">Price range</span>
-<div class="collapse" id="collapseOne" data-parent="#accordion">
-      <ul class="items">
-          <li class="border-bottom">
-
-                     {% set max = products|map(attribute='current_price')|max() %}
-            {% set min = products|map(attribute='current_price')|min() %}
-          <div class="price-content" style="font-size: 0.7em;">
-        <div>
-          <label>Min</label>
-          <p id="min-value">PLN {{min_price}}</p>
-        </div>
-
-        <div>
-          <label>Max</label>
-          <p id="max-value">PLN {{max_price}}</p>
-        </div>
-      </div>
-
-        <div class="range-slider">
-
-
-          <input type="range" name="min-price" class="price-range min-price" value="{{min_price}}" min="{{general_min_price}}" max="{{general_max_price}}" step="1">
-          <input type="range" name="max-price" class="price-range max-price" value="{{max_price}}" min="{{general_min_price}}" max="{{general_max_price}}" step="1">
-        </div>
-
-
-          </li>
-              <center><button name="filter-gender" style="height:30px; padding:5px; font-size:13px; margin-top:2px;" class="btn btn-primary">Filter</button></center>
-      </ul>
-</div>
-
-    </div>
-
-
-
-<div id="sizes-list" class="dropdown-check-list" tabindex="100">
-   <span class="anchor" data-toggle="collapse" data-target="#collapseTwo">Select Sizes</span>
-<div class="collapse" id="collapseTwo" data-parent="#accordion">
-      <ul class="items">
-      {% for size in sizes %}
-      {% if size in sizes_list %}
-    <li><input name="size" type="checkbox" value="{{size}}" checked/>{{size}} </li>
-      {% else %}
-         <li><input name="size" type="checkbox" value="{{size}}" />{{size}} </li>
-      {% endif %}
-      {% endfor %}
-          <div class="border-bottom"></div>
-    <center><button name="filter-gender" style="height:30px; padding:5px; font-size:13px; margin-top:2px;" class="btn btn-primary">Filter</button></center>
-  </ul>
-</div>
-</div>
-
-    <div id="gender-list" class="dropdown-check-list" tabindex="100">
-   <span class="anchor" data-toggle="collapse" data-target="#collapseThree">Select Gender</span>
-<div class="collapse" id="collapseThree" data-parent="#accordion">
-      <ul class="items">
-      {% set all_genders = ["Women", "Men"] %}
-      {% for gender in all_genders %}
-      {% if gender in gender_list %}
-    <li><input name="sex" value="{{gender}}" type="checkbox" checked/>{{gender}}</li>
-      {% else %}
-     <li><input name="sex" value="{{gender}}" type="checkbox" />{{gender}}</li>
-      {% endif %}
-      {% endfor %}
-             <div class="border-bottom"></div>
-         <center><button name="filter-gender" style="height:30px; padding:5px; font-size:13px; margin-top:2px;" class="btn btn-primary">Filter</button></center>
-  </ul>
-</div>
-</div>
-
-</div>
+    <button class="btn btn-primary" style="width:100%; margin-bottom:40px;">Filter</button>
 </center>
-    </form>
+</div>
+<!-- Sidebar Filter End -->
 
+<div class="col-lg-9 col-md-12">
+    <div class="row pb-3">
+        <!-- Sort By Button Start -->
+        <div class="col-12 pb-1">
+            <div class="d-flex align-items-center justify-content-between mb-4">
+                <div class="dropdown ml-0">
+                    <button class="btn border dropdown-toggle" type="button" id="triggerId" data-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false">
+                        Sort by
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="triggerId">
+                        {% if sort_by == "latest" %}
+                        <a name="sort" class="dropdown-item active"
+                           href="{{ url_for('search', q=search_query, sort_by='latest', min_price=min_price, max_price=max_price, sizes_list=sizes_list, gender_list=gender_list)}}">Latest</a>
+                        {% else %}
+                        <a name="sort" class="dropdown-item"
+                           href="{{ url_for('search', q=search_query, sort_by='latest', min_price=min_price, max_price=max_price, sizes_list=sizes_list, gender_list=gender_list)}}">Latest</a>
+                        {% endif %}
+                        {% if sort_by == "most_expensive" %}
+                        <a name="sort" class="dropdown-item active"
+                           href="{{ url_for('search', q=search_query, sort_by='most_expensive', min_price=min_price, max_price=max_price, sizes_list=sizes_list, gender_list=gender_list)}}">Most
+                            Expensive</a>
+                        {% else %}
+                        <a name="sort" class="dropdown-item"
+                           href="{{ url_for('search', q=search_query, sort_by='most_expensive', min_price=min_price, max_price=max_price, sizes_list=sizes_list, gender_list=gender_list)}}">Most
+                            Expensive</a>
+                        {% endif %}
+                        {% if sort_by == "least_expensive" %}
+                        <a name="sort" class="dropdown-item active"
+                           href="{{ url_for('search', q=search_query, sort_by='least_expensive', min_price=min_price, max_price=max_price, sizes_list=sizes_list, gender_list=gender_list)}}">Least
+                            Expensive</a>
+                        {% else %}
+                        <a name="sort" class="dropdown-item"
+                           href="{{ url_for('search', q=search_query, sort_by='least_expensive', min_price=min_price, max_price=max_price, sizes_list=sizes_list, gender_list=gender_list)}}">Least
+                            Expensive</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-    <!-- Page Header End -->
+        <!-- Sort By Button End -->
 
-
-
-
-
-
-
-
- {% if not products[0] %}
-
-    <p class="text-center mt-5">There are no results matching your search criteria.</p>
-    {% else %}
-
-
-
-
-   <div class="container-fluid pt-5">
-
-
-        <div class="row px-xl-5 pb-3">
-            {% for product in products %}
-
-            <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-                 <a href="{{ url_for('view_product', product_id=product.id) }}" style="text-decoration:none">
+        <!-- No Results Message Start -->
+        {% if products.total == 0 %}
+        <div class="col-12 pb-1">
+            <div class="justify-content-center mb-1">
+                <p class="text-center">There are no results matching your search criteria.</p>
+            </div>
+        </div>
+        <!-- No Results Message End -->
+        {% else %}
+        <!-- Show Results Starts -->
+        {% for product in products.items %}
+        <div class="col-lg-4 col-md-6 col-sm-12 pb-1">
+            <a href="{{ url_for('view_product', product_id=product.id) }}" style="text-decoration:none">
                 <div class="card product-item border-0 mb-4">
                     <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
                         <img class="img-fluid w-100" src="{{product.img_url}}" alt="">
                     </div>
-                    <div class="card-body border-left border-right border-bottom text-center p-0 pt-4 pb-3">
-                        <h6 class="text-truncate mb-3">{{product.name}}</h6>
+                    <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
+                        <h6 class="text-truncate mb-3">{{ product.name }}</h6>
                         <div class="d-flex justify-content-center">
-                            <h6>PLN {{product.current_price}}</h6><h6 class="text-muted ml-2"><del>PLN {{product.original_price}}</del></h6>
+                            <h6>PLN {{ product.current_price }}</h6>
+                            <h6 class="text-muted ml-2">
+                                <del>PLN {{product.original_price }}</del>
+                            </h6>
                         </div>
                     </div>
-
                 </div>
-                      </a>
-            </div>
-
-            {% endfor %}
+            </a>
         </div>
+        {% endfor %}
+        <!-- Show Results End -->
+        {% endif %}
 
+        <!-- Pages Bar Start -->
+        <div class="col-12 pb-1">
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center mb-3">
+                    {% for page_num in products.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2)
+                    %}
+                    {% if page_num %}
+                    {% if products.page == page_num %}
+                    <li class="page-item active"><a class="page-link"
+                                                    href="{{ url_for('search', q=search_query, page=page_num, min_price=min_price, max_price=max_price, sizes_list=sizes_list, gender_list=gender_list, sort_by=sort_by) }}">{{page_num}}</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item"><a class="page-link"
+                                             href="{{ url_for('search', q=search_query, page=page_num, min_price=min_price, max_price=max_price, sizes_list=sizes_list, gender_list=gender_list, sort_by=sort_by) }}">{{page_num}}</a>
+                    </li>
+                    {% endif %}
+                    {% else %}
+                    <p style="margin-top:18px; padding:0 5px 0 5px;">...</p>
+                    {% endif %}
+                    {% endfor %}
+                </ul>
+            </nav>
+        </div>
+        <!-- Pages Bar End -->
     </div>
-
-{% endif %}
-
-
+</div>
+</div>
+</div>
 
 {% include "footer.html" %}
