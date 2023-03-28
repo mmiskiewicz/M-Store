@@ -26,7 +26,7 @@
         <tr style="cursor: pointer;" onclick="window.location='{{ url_for('order', order_id=order.id) }}';">
             <td class="align-middle">{{ order.id }}</td>
             <td class="align-middle">{{ order.order_date.date() }}</td>
-            <td class="align-middle">PLN {{ order.total }}</td>
+            <td class="align-middle">PLN {{ order.total | round(2) }}</td>
         </tr>
         </tbody>
         {% endfor %}
