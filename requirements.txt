@@ -22,4 +22,4 @@ gunicorn==20.1.0
 stripe~=5.2.0
 beautifulsoup4~=4.11.2
 redmail~=0.6.0
-python-dotenv~=1.0.0
+python-dotenv>=0.1.0,<1.0.0
