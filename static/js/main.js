@@ -92,14 +92,88 @@
         if (button.hasClass('btn-plus')) {
             var newVal = parseFloat(oldValue) + 1;
         } else {
-            if (oldValue > 0) {
+            if (oldValue > 1) {
                 var newVal = parseFloat(oldValue) - 1;
             } else {
-                newVal = 0;
+                newVal = 1;
+            }
+        }
+        button.parent().parent().find('input').val(newVal);
+    });
+
+     // Product Quantity
+    $('.quantity_cart button').on('click', function (e) {
+        var button = $(this);
+        var oldValue = button.parent().parent().find('input').val();
+        if (button.hasClass('btn-plus')) {
+            var newVal = parseFloat(oldValue) + 1;
+        } else {
+            if (oldValue > 1) {
+                var newVal = parseFloat(oldValue) - 1;
+            } else {
+                newVal = 1;
             }
         }
         button.parent().parent().find('input').val(newVal);
     });
     
 })(jQuery);
+
+// Price Range Filter
+
+let minValue = document.getElementById("min-value");
+let maxValue = document.getElementById("max-value");
+
+function validateRange(minPrice, maxPrice) {
+  if (minPrice > maxPrice) {
+
+    // Swap to Values
+    let tempValue = maxPrice;
+    maxPrice = minPrice;
+    minPrice = tempValue;
+  }
+
+  minValue.innerHTML = "PLN " + minPrice;
+  maxValue.innerHTML = "PLN " + maxPrice;
+}
+
+const inputElements = document.querySelectorAll(".price-range");
+
+inputElements.forEach((element) => {
+  element.addEventListener("change", (e) => {
+    let minPrice = parseInt(inputElements[0].value);
+    let maxPrice = parseInt(inputElements[1].value);
+
+    validateRange(minPrice, maxPrice);
+  });
+});
+
+// Other Filters
+
+var checkList = document.getElementById('sizes-list');
+checkList.getElementsByClassName('anchor')[0].onclick = function(evt) {
+  if (checkList.classList.contains('visible'))
+    checkList.classList.remove('visible');
+  else
+    checkList.classList.add('visible');
+}
+
+var genderList = document.getElementById('gender-list');
+genderList.getElementsByClassName('anchor')[0].onclick = function(evt) {
+  if (genderList.classList.contains('visible'))
+    genderList.classList.remove('visible');
+  else
+    genderList.classList.add('visible');
+}
+
+var anotherList = document.getElementById('anotherList');
+anotherList.getElementsByClassName('anchor')[0].onclick = function(evt) {
+  if (anotherList.classList.contains('visible'))
+    anotherList.classList.remove('visible');
+  else
+    anotherList.classList.add('visible');
+}
+
+
+
 
