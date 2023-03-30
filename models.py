@@ -1,6 +1,7 @@
 from flask_login import UserMixin
 from sqlalchemy.orm import relationship
 from __init__ import db
+import datetime
 
 
 class User(UserMixin, db.Model):
