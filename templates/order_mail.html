@@ -198,8 +198,8 @@
                                             </td>
                                             <td>{{ element['size'] }}</td>
                                             <td>{{ element['quantity'] }}</td>
-                                            <td>PLN {{element['price'] * element['quantity']}}</td>
-                                            {% set total.value = total.value + (element['price'] * element['quantity'])
+                                            <td>PLN {{ (element['price'] * element['quantity']) | round(2) }}</td>
+                                            {% set total.value = (total.value + (element['price'] * element['quantity'])) | round(2)
                                             %}
                                         </tr>
                                         {% endfor %}
