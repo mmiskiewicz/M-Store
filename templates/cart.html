@@ -65,10 +65,10 @@
                             </div>
                         </form>
                     </td>
-                    {% set subtotal.value = subtotal.value + products[element['product_id'] -1 ].current_price *
-                    element['quantity'] %}
-                    <td class="align-middle">PLN {{products[element['product_id'] -1 ].current_price *
-                        element['quantity']}}
+                    {% set subtotal.value = (subtotal.value + products[element['product_id'] -1 ].current_price *
+                    element['quantity']) | round(2) %}
+                    <td class="align-middle">PLN {{ (products[element['product_id'] -1 ].current_price *
+                        element['quantity']) | round(2) }}
                     </td>
                     <form method="post" action="{{ url_for('remove_item', element_id=counter.value) }}">
                         <td class="align-middle">
