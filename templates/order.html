@@ -31,7 +31,7 @@
                                                   style="width: 50px;"></td>
                     <td class="align-middle">{{ products[order_product["product_id"] -1 ].name }}</td>
                     <td class="align-middle">{{order_product["product_size"]}}</td>
-                    <td class="align-middle">PLN {{ order_product.subtotal }}</td>
+                    <td class="align-middle">PLN {{ order_product.subtotal | round(2) }}</td>
                     <td class="align-middle">{{ order_product.product_quantity }}</td>
                     {% set subtotal.value = subtotal.value + order_product.subtotal %}
                 </tr>
@@ -50,7 +50,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between mb-3 pt-1">
                         <h6 class="font-weight-medium">Subtotal</h6>
-                        <h6 class="font-weight-medium">PLN {{ subtotal.value }}</h6>
+                        <h6 class="font-weight-medium">PLN {{ subtotal.value | round(2) }}</h6>
                     </div>
 
                     {% if order.discount_id: %}
